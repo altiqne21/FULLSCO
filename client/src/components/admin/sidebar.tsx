@@ -49,13 +49,6 @@ const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
   // تسجيل الحالة في الكونسول للتصحيح
   console.log('Sidebar rendered with:', { isMobileOpen, isMobile, location });
 
-  // إغلاق السايدبار عند التنقل في الأجهزة المحمولة
-  useEffect(() => {
-    if (isMobile && isMobileOpen && location) {
-      onClose();
-    }
-  }, [location, isMobile, isMobileOpen, onClose]);
-
   // كود تصحيح مشكلة ظهور السايدبار عند الضغط على زر القائمة
   useEffect(() => {
     if (isMobileOpen !== prevOpen) {
@@ -84,9 +77,10 @@ const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
 
   const handleLogout = () => {
     logout();
-    if (isMobile) {
-      onClose();
-    }
+    // تعطيل إغلاق القائمة الجانبية عند تسجيل الخروج
+    // if (isMobile) {
+    //   onClose();
+    // }
   };
 
   const isActive = (path: string) => location === path;
@@ -151,7 +145,6 @@ const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
                 "w-full justify-start px-3 py-2 h-auto text-sm rounded-md transition-colors mb-4 border border-sidebar-accent/30",
                 "text-sidebar-foreground/80 hover:bg-sidebar-accent/10 hover:text-sidebar-foreground"
               )}
-              onClick={() => isMobile && onClose()}
             >
               <Home className="ml-2 h-4 w-4" />
               العودة للموقع
@@ -168,7 +161,6 @@ const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
                     ? "bg-sidebar-primary text-sidebar-primary-foreground"
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent/10 hover:text-sidebar-foreground"
                 )}
-                onClick={() => isMobile && onClose()}
               >
                 <item.icon className="ml-2 h-4 w-4" />
                 {item.label}
