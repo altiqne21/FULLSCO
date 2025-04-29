@@ -1,133 +1,182 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, ChevronDown, Menu } from "lucide-react";
+import { Search, ChevronDown, Menu, GraduationCap, BookOpen, MapPin, Globe, Award, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Header = () => {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { user } = useAuth();
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isActive = (path: string) => location === path;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
+    <header 
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        scrolled 
+          ? "bg-white/95 shadow-sm backdrop-blur-md" 
+          : "bg-white"
+      }`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center justify-between md:h-20">
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-2xl font-bold tracking-tight text-primary md:text-3xl">
                 FULL<span className="text-accent">SCO</span>
               </span>
             </Link>
             
             {/* Desktop Navigation */}
-            <nav className="ml-10 hidden space-x-8 md:flex">
+            <nav className="ml-10 hidden space-x-1 md:flex lg:space-x-2">
               <Link href="/">
-                <a className={`px-3 py-2 text-sm font-medium ${isActive('/') ? 'text-primary' : 'text-gray-900 hover:text-primary'}`}>
-                  Home
-                </a>
+                <span className={`link-hover flex items-center px-3 py-2 text-sm font-medium transition-colors ${isActive('/') ? 'text-primary' : 'text-foreground/80 hover:text-primary'}`}>
+                  الرئيسية
+                </span>
               </Link>
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center px-3 py-2 text-sm font-medium text-gray-900 hover:text-primary">
-                    Scholarships <ChevronDown className="ml-1 h-4 w-4" />
+                  <button className="link-hover flex items-center px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:text-primary">
+                    المنح الدراسية <ChevronDown className="mr-1 h-4 w-4" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem asChild>
+                <DropdownMenuContent className="animate-slide-up w-56">
+                  <DropdownMenuItem asChild className="flex cursor-pointer items-center gap-2 py-2">
                     <Link href="/scholarships?level=bachelor">
-                      <a className="w-full">Undergraduate</a>
+                      <div className="flex w-full items-center gap-2">
+                        <BookOpen className="h-4 w-4 text-primary" /> البكالوريوس
+                      </div>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuItem asChild className="flex cursor-pointer items-center gap-2 py-2">
                     <Link href="/scholarships?level=masters">
-                      <a className="w-full">Masters</a>
+                      <div className="flex w-full items-center gap-2">
+                        <Award className="h-4 w-4 text-accent" /> الماجستير
+                      </div>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuItem asChild className="flex cursor-pointer items-center gap-2 py-2">
                     <Link href="/scholarships?level=phd">
-                      <a className="w-full">PhD</a>
+                      <div className="flex w-full items-center gap-2">
+                        <GraduationCap className="h-4 w-4 text-primary" /> الدكتوراه
+                      </div>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild className="flex cursor-pointer items-center gap-2 py-2">
                     <Link href="/scholarships?funded=true">
-                      <a className="w-full">Full Funding</a>
+                      <div className="flex w-full items-center gap-2">
+                        <Award className="h-4 w-4 text-accent" /> تمويل كامل
+                      </div>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
+                  <DropdownMenuItem asChild className="flex cursor-pointer items-center gap-2 py-2">
                     <Link href="/scholarships">
-                      <a className="w-full">By Country</a>
+                      <div className="flex w-full items-center gap-2">
+                        <Globe className="h-4 w-4 text-primary" /> حسب الدولة
+                      </div>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="flex cursor-pointer items-center gap-2 py-2">
+                    <Link href="/scholarships">
+                      <div className="flex w-full items-center gap-2">
+                        <MapPin className="h-4 w-4 text-accent" /> جميع المنح
+                      </div>
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               
               <Link href="/articles">
-                <a className={`px-3 py-2 text-sm font-medium ${isActive('/articles') ? 'text-primary' : 'text-gray-900 hover:text-primary'}`}>
-                  Resources
-                </a>
+                <span className={`link-hover flex items-center px-3 py-2 text-sm font-medium transition-colors ${isActive('/articles') ? 'text-primary' : 'text-foreground/80 hover:text-primary'}`}>
+                  موارد تعليمية
+                </span>
               </Link>
               
               <Link href="/success-stories">
-                <a className={`px-3 py-2 text-sm font-medium ${isActive('/success-stories') ? 'text-primary' : 'text-gray-900 hover:text-primary'}`}>
-                  Success Stories
-                </a>
+                <span className={`link-hover flex items-center px-3 py-2 text-sm font-medium transition-colors ${isActive('/success-stories') ? 'text-primary' : 'text-foreground/80 hover:text-primary'}`}>
+                  قصص نجاح
+                </span>
               </Link>
               
               <Link href="/about">
-                <a className={`px-3 py-2 text-sm font-medium ${isActive('/about') ? 'text-primary' : 'text-gray-900 hover:text-primary'}`}>
-                  About
-                </a>
+                <span className={`link-hover flex items-center px-3 py-2 text-sm font-medium transition-colors ${isActive('/about') ? 'text-primary' : 'text-foreground/80 hover:text-primary'}`}>
+                  عن الموقع
+                </span>
               </Link>
               
               <Link href="/contact">
-                <a className={`px-3 py-2 text-sm font-medium ${isActive('/contact') ? 'text-primary' : 'text-gray-900 hover:text-primary'}`}>
-                  Contact
-                </a>
+                <span className={`link-hover flex items-center px-3 py-2 text-sm font-medium transition-colors ${isActive('/contact') ? 'text-primary' : 'text-foreground/80 hover:text-primary'}`}>
+                  اتصل بنا
+                </span>
               </Link>
             </nav>
           </div>
           
-          <div className="flex items-center">
-            <div className="hidden md:block">
+          <div className="flex items-center gap-2">
+            <div className="hidden lg:block">
               <div className="relative">
                 <Input 
                   type="text" 
-                  placeholder="Search scholarships..." 
-                  className="w-64 py-1.5 pl-10 pr-3" 
+                  placeholder="ابحث عن المنح..." 
+                  className="h-10 w-64 rounded-full bg-muted/70 px-4 py-2 pl-10 pr-4 text-sm shadow-soft transition-all focus-visible:bg-white focus-visible:shadow-md focus-visible:ring-accent" 
                 />
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-                  <Search className="h-4 w-4 text-gray-400" />
+                <div className="absolute inset-y-0 left-3 flex items-center">
+                  <Search className="h-4 w-4 text-muted-foreground" />
                 </div>
               </div>
             </div>
             
-            <div className="ml-4 flex items-center md:ml-6">
+            <div className="flex items-center gap-2 md:gap-3">
               {user ? (
                 <Link href="/admin">
-                  <Button className="hidden sm:block">Dashboard</Button>
+                  <Button 
+                    className="button-hover hidden items-center gap-2 rounded-full border-primary bg-primary/10 text-primary hover:bg-primary/20 sm:flex"
+                    variant="outline"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>لوحة التحكم</span>
+                  </Button>
                 </Link>
               ) : (
                 <Link href="/admin/login">
-                  <Button variant="outline" className="hidden sm:block">
-                    Sign In
+                  <Button 
+                    variant="outline" 
+                    className="button-hover hidden items-center gap-2 rounded-full text-primary hover:bg-primary/10 sm:flex"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>تسجيل الدخول</span>
                   </Button>
                 </Link>
               )}
               
               <Link href="/subscribe">
-                <Button variant="accent" className="ml-3">
-                  Subscribe
+                <Button 
+                  className="button-hover rounded-full bg-accent font-medium text-white shadow-soft transition-all hover:bg-accent/90"
+                >
+                  اشترك الآن
                 </Button>
               </Link>
               
@@ -135,8 +184,9 @@ const Header = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="ml-3 md:hidden"
+                className="text-foreground md:hidden"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="القائمة"
               >
                 <Menu className="h-6 w-6" />
               </Button>
@@ -147,52 +197,65 @@ const Header = () => {
       
       {/* Mobile menu, show/hide based on menu state */}
       {mobileMenuOpen && (
-        <div className="md:hidden">
-          <div className="space-y-1 px-2 pb-3 pt-2">
-            <Link href="/">
-              <a className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">
-                Home
-              </a>
-            </Link>
-            <Link href="/scholarships">
-              <a className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">
-                Scholarships
-              </a>
-            </Link>
-            <Link href="/articles">
-              <a className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">
-                Resources
-              </a>
-            </Link>
-            <Link href="/success-stories">
-              <a className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">
-                Success Stories
-              </a>
-            </Link>
-            <Link href="/about">
-              <a className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">
-                About
-              </a>
-            </Link>
-            <Link href="/contact">
-              <a className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100">
-                Contact
-              </a>
-            </Link>
-          </div>
-          <div className="border-t border-gray-200 pt-4 pb-3">
-            <div className="flex items-center px-4">
-              <div className="flex-shrink-0">
-                {user ? (
-                  <Link href="/admin">
-                    <Button>Dashboard</Button>
-                  </Link>
-                ) : (
-                  <Link href="/admin/login">
-                    <Button variant="outline">Sign in</Button>
-                  </Link>
-                )}
+        <div className="animate-fade-in absolute inset-x-0 top-16 z-50 border-t border-border bg-background/95 pb-6 shadow-md backdrop-blur-md md:hidden">
+          <div className="container mx-auto px-4 pt-2 sm:px-6">
+            <div className="relative my-4 w-full">
+              <Input 
+                type="text" 
+                placeholder="ابحث عن المنح..." 
+                className="h-10 w-full rounded-full bg-muted/70 px-4 py-2 pl-10 pr-4 text-sm focus-visible:bg-white focus-visible:ring-accent" 
+              />
+              <div className="absolute inset-y-0 left-3 flex items-center">
+                <Search className="h-4 w-4 text-muted-foreground" />
               </div>
+            </div>
+
+            <div className="space-y-1 py-2">
+              <Link href="/">
+                <div className="flex items-center gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-muted hover:text-primary">
+                  <span className={isActive('/') ? 'text-primary font-semibold' : ''}>الرئيسية</span>
+                </div>
+              </Link>
+              <Link href="/scholarships">
+                <div className="flex items-center gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-muted hover:text-primary">
+                  <span className={isActive('/scholarships') ? 'text-primary font-semibold' : ''}>المنح الدراسية</span>
+                </div>
+              </Link>
+              <Link href="/articles">
+                <div className="flex items-center gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-muted hover:text-primary">
+                  <span className={isActive('/articles') ? 'text-primary font-semibold' : ''}>موارد تعليمية</span>
+                </div>
+              </Link>
+              <Link href="/success-stories">
+                <div className="flex items-center gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-muted hover:text-primary">
+                  <span className={isActive('/success-stories') ? 'text-primary font-semibold' : ''}>قصص نجاح</span>
+                </div>
+              </Link>
+              <Link href="/about">
+                <div className="flex items-center gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-muted hover:text-primary">
+                  <span className={isActive('/about') ? 'text-primary font-semibold' : ''}>عن الموقع</span>
+                </div>
+              </Link>
+              <Link href="/contact">
+                <div className="flex items-center gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground/80 hover:bg-muted hover:text-primary">
+                  <span className={isActive('/contact') ? 'text-primary font-semibold' : ''}>اتصل بنا</span>
+                </div>
+              </Link>
+            </div>
+            
+            <div className="mt-4 flex items-center justify-between gap-4 border-t border-border pt-4">
+              {user ? (
+                <Link href="/admin" className="flex-1">
+                  <Button className="w-full">لوحة التحكم</Button>
+                </Link>
+              ) : (
+                <Link href="/admin/login" className="flex-1">
+                  <Button variant="outline" className="w-full">تسجيل الدخول</Button>
+                </Link>
+              )}
+              <Link href="/subscribe" className="flex-1">
+                <Button className="w-full bg-accent text-white hover:bg-accent/90">اشترك الآن</Button>
+              </Link>
             </div>
           </div>
         </div>
