@@ -4,7 +4,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
-import { formatDate } from "@/lib/utils";
+import { formatDate, cn } from "@/lib/utils";
 import Sidebar from "@/components/admin/sidebar";
 import {
   Table,
@@ -21,7 +21,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,10 +32,11 @@ import {
   Edit,
   Trash2,
   ExternalLink,
-  CheckCircle2,
   XCircle,
+  Menu,
 } from "lucide-react";
 import { Scholarship, Country, Level, Category } from "@shared/schema";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const AdminScholarships = () => {
   const { isLoading: authLoading, isAuthenticated } = useAuth();
@@ -45,6 +45,8 @@ const AdminScholarships = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -86,16 +88,16 @@ const AdminScholarships = () => {
     },
     onSuccess: () => {
       toast({
-        title: "Scholarship deleted",
-        description: "The scholarship has been successfully deleted.",
+        title: "تم حذف المنحة",
+        description: "تم حذف المنحة الدراسية بنجاح.",
       });
       queryClient.invalidateQueries({ queryKey: ["/api/scholarships"] });
       setShowDeleteDialog(false);
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: `Failed to delete scholarship: ${error}`,
+        title: "خطأ",
+        description: `فشل في حذف المنحة: ${error}`,
         variant: "destructive",
       });
     },
@@ -143,69 +145,86 @@ const AdminScholarships = () => {
 
   if (authLoading || !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        جاري التحميل...
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar />
-
-      <div className="flex-1 overflow-y-auto">
-        <main className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              Manage Scholarships
-            </h1>
+    <div className="bg-background min-h-screen relative overflow-x-hidden">
+      {/* السايدبار للجوال */}
+      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      
+      {/* المحتوى الرئيسي */}
+      <div className={cn(
+        "transition-all duration-300",
+        isMobile ? "w-full" : "mr-64"
+      )}>
+        <main className="p-4 md:p-6">
+          {/* زر فتح السايدبار في الجوال والهيدر */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div className="flex items-center">
+              {isMobile && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="ml-2" 
+                  onClick={() => setSidebarOpen(true)}
+                  aria-label="فتح القائمة"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              )}
+              <h1 className="text-xl md:text-2xl font-bold">إدارة المنح الدراسية</h1>
+            </div>
             <Link href="/admin/scholarships/create">
-              <Button className="flex items-center">
-                <PlusCircle className="mr-2 h-4 w-4" /> Add Scholarship
+              <Button className="flex items-center w-full sm:w-auto shadow-soft">
+                <PlusCircle className="ml-2 h-4 w-4" /> إضافة منحة جديدة
               </Button>
             </Link>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <div className="relative w-64">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+          <div className="bg-card p-4 md:p-6 rounded-lg shadow-soft mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search scholarships..."
-                  className="pl-8"
+                  placeholder="ابحث عن المنح..."
+                  className="pr-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="text-sm text-gray-500">
-                {filteredScholarships?.length || 0} scholarships
+              <div className="text-sm text-muted-foreground">
+                {filteredScholarships?.length || 0} منحة دراسية
               </div>
             </div>
 
             {isLoading ? (
               <div className="py-12 text-center">
                 <div className="inline-block animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
-                <p className="mt-2 text-gray-600">Loading scholarships...</p>
+                <p className="mt-2 text-muted-foreground">جاري تحميل المنح الدراسية...</p>
               </div>
             ) : error ? (
               <div className="text-center py-12">
                 <XCircle className="h-12 w-12 text-destructive mx-auto mb-2" />
-                <h3 className="text-lg font-medium text-gray-900 mb-1">
-                  Error loading scholarships
+                <h3 className="text-lg font-medium mb-1">
+                  خطأ في تحميل المنح الدراسية
                 </h3>
-                <p className="text-gray-600">Please try again later.</p>
+                <p className="text-muted-foreground">يرجى المحاولة مرة أخرى لاحقًا.</p>
               </div>
             ) : filteredScholarships && filteredScholarships.length > 0 ? (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Country</TableHead>
-                      <TableHead>Level</TableHead>
-                      <TableHead>Deadline</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>العنوان</TableHead>
+                      <TableHead className="hidden md:table-cell">الدولة</TableHead>
+                      <TableHead className="hidden md:table-cell">المستوى</TableHead>
+                      <TableHead className="hidden lg:table-cell">الموعد النهائي</TableHead>
+                      <TableHead>الحالة</TableHead>
+                      <TableHead className="text-left">الإجراءات</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -213,25 +232,28 @@ const AdminScholarships = () => {
                       <TableRow key={scholarship.id}>
                         <TableCell className="font-medium">
                           {scholarship.title}
+                          <div className="md:hidden text-xs text-muted-foreground mt-1">
+                            {getCountryName(scholarship.countryId)} • {getLevelName(scholarship.levelId)}
+                          </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden md:table-cell">
                           {getCountryName(scholarship.countryId)}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="hidden md:table-cell">
                           {getLevelName(scholarship.levelId)}
                         </TableCell>
-                        <TableCell>
-                          {scholarship.deadline || "Ongoing"}
+                        <TableCell className="hidden lg:table-cell">
+                          {scholarship.deadline || "مستمر"}
                         </TableCell>
                         <TableCell>
                           {scholarship.isFeatured ? (
-                            <Badge variant="success">Featured</Badge>
+                            <Badge className="bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20">مميز</Badge>
                           ) : (
-                            <Badge variant="secondary">Standard</Badge>
+                            <Badge variant="secondary">عادي</Badge>
                           )}
                         </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end space-x-2">
+                        <TableCell>
+                          <div className="flex justify-start gap-2">
                             <Link
                               href={`/scholarships/${scholarship.slug}`}
                               target="_blank"
@@ -272,9 +294,8 @@ const AdminScholarships = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-600">
-                  No scholarships found. Create your first scholarship using the
-                  "Add Scholarship" button.
+                <p className="text-muted-foreground">
+                  لم يتم العثور على منح دراسية. قم بإنشاء أول منحة باستخدام زر "إضافة منحة جديدة".
                 </p>
               </div>
             )}
@@ -282,14 +303,13 @@ const AdminScholarships = () => {
         </main>
       </div>
 
-      {/* Delete confirmation dialog */}
+      {/* نافذة تأكيد الحذف */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Scholarship</DialogTitle>
+            <DialogTitle>حذف المنحة الدراسية</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this scholarship? This action
-              cannot be undone.
+              هل أنت متأكد من رغبتك في حذف هذه المنحة؟ لا يمكن التراجع عن هذا الإجراء.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -297,14 +317,14 @@ const AdminScholarships = () => {
               variant="outline"
               onClick={() => setShowDeleteDialog(false)}
             >
-              Cancel
+              إلغاء
             </Button>
             <Button
               variant="destructive"
               onClick={confirmDelete}
               disabled={deleteMutation.isPending}
             >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+              {deleteMutation.isPending ? "جاري الحذف..." : "حذف"}
             </Button>
           </DialogFooter>
         </DialogContent>

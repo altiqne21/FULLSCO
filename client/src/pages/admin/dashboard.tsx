@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/use-auth';
@@ -13,16 +13,20 @@ import {
   Edit, 
   UserPlus,
   Eye,
-  Activity
+  Activity,
+  Menu
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from 'wouter';
-import { formatNumber } from '@/lib/utils';
+import { formatNumber, cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const AdminDashboard = () => {
   const { user, isLoading: authLoading, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -53,101 +57,118 @@ const AdminDashboard = () => {
   });
 
   if (authLoading || !isAuthenticated) {
-    return <div className="min-h-screen flex items-center justify-center bg-gray-100">Loading...</div>;
+    return <div className="min-h-screen flex items-center justify-center bg-gray-100">جاري التحميل...</div>;
   }
 
   const stats = [
     {
-      title: "Total Scholarships",
+      title: "إجمالي المنح",
       value: scholarships?.length || 0,
       icon: GraduationCap,
-      color: "bg-primary-100 text-primary"
+      color: "bg-primary/10 text-primary"
     },
     {
-      title: "Registered Users",
+      title: "المستخدمين",
       value: users?.length || 0,
       icon: Users,
-      color: "bg-accent-100 text-accent"
+      color: "bg-accent/10 text-accent"
     },
     {
-      title: "Blog Posts",
+      title: "المقالات",
       value: posts?.length || 0,
       icon: FileText,
-      color: "bg-secondary-100 text-secondary-500"
+      color: "bg-secondary/10 text-secondary"
     },
     {
-      title: "Subscribers",
+      title: "المشتركين",
       value: subscribers?.length || 0,
       icon: Users,
-      color: "bg-green-100 text-green-600"
+      color: "bg-emerald-500/10 text-emerald-600"
     }
   ];
 
   const recentActivity = [
     {
       type: "add",
-      entity: "scholarship",
-      title: "Gates Cambridge Scholarship",
-      time: "2 hours ago",
+      entity: "منحة",
+      title: "منحة جيتس كامبريدج",
+      time: "منذ ساعتين",
       icon: PlusCircle,
-      color: "bg-primary-100 text-primary"
+      color: "bg-primary/10 text-primary"
     },
     {
       type: "edit",
-      entity: "post",
-      title: "Tips for Scholarship Interviews",
-      time: "5 hours ago",
+      entity: "مقال",
+      title: "نصائح لمقابلات المنح الدراسية",
+      time: "منذ 5 ساعات",
       icon: Edit,
-      color: "bg-secondary-100 text-secondary-500"
+      color: "bg-secondary/10 text-secondary"
     },
     {
       type: "add",
-      entity: "user",
-      title: "John Smith",
-      time: "Yesterday",
+      entity: "مستخدم",
+      title: "أحمد محمود",
+      time: "الأمس",
       icon: UserPlus,
-      color: "bg-accent-100 text-accent"
+      color: "bg-accent/10 text-accent"
     },
     {
       type: "view",
-      entity: "post",
-      title: "How to Write a Winning Scholarship Essay",
-      time: "2 days ago",
+      entity: "مقال",
+      title: "كيف تكتب مقال ناجح للمنحة الدراسية",
+      time: "منذ يومين",
       icon: Eye,
-      color: "bg-purple-100 text-purple-600"
+      color: "bg-purple-500/10 text-purple-600"
     }
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar />
+    <div className="bg-background min-h-screen relative overflow-x-hidden">
+      {/* السايدبار للجوال */}
+      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      <div className="flex-1 overflow-y-auto">
-        <main className="p-6">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+      {/* المحتوى الرئيسي */}
+      <div className={cn(
+        "transition-all duration-300",
+        isMobile ? "w-full" : "mr-64"
+      )}>
+        <main className="p-4 md:p-6">
+          {/* زر فتح السايدبار في الجوال والهيدر */}
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <span className="text-sm text-gray-600 mr-3">Welcome, {user?.fullName || user?.username}</span>
+              {isMobile && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="ml-2" 
+                  onClick={() => setSidebarOpen(true)}
+                  aria-label="فتح القائمة"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              )}
+              <h1 className="text-xl md:text-2xl font-bold">لوحة التحكم</h1>
+            </div>
+            <div className="flex items-center">
+              <span className="text-sm text-muted-foreground ml-3 hidden sm:inline-block">مرحباً، {user?.fullName || user?.username}</span>
               <Avatar>
-                <AvatarImage src="https://randomuser.me/api/portraits/men/1.jpg" alt={user?.username} />
-                <AvatarFallback>{user?.username?.substring(0, 2).toUpperCase()}</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground">{user?.username?.substring(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
             </div>
           </div>
           
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* شبكة الإحصائيات */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
             {stats.map((stat, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
+              <Card key={index} className="shadow-soft">
+                <CardContent className="p-4 md:p-6">
                   <div className="flex items-center">
-                    <div className={`p-3 rounded-full ${stat.color} mr-4`}>
-                      <stat.icon className="h-6 w-6" />
+                    <div className={`p-3 rounded-full ${stat.color} ml-4`}>
+                      <stat.icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">{stat.title}</p>
-                      <p className="text-2xl font-semibold">{formatNumber(stat.value)}</p>
+                      <p className="text-sm text-muted-foreground">{stat.title}</p>
+                      <p className="text-xl md:text-2xl font-semibold">{formatNumber(stat.value)}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -156,29 +177,29 @@ const AdminDashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            {/* Activity Feed */}
-            <Card className="lg:col-span-2">
+            {/* سجل النشاطات */}
+            <Card className="shadow-soft lg:col-span-2">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
+                <CardTitle className="text-lg">آخر النشاطات</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {recentActivity.map((activity, index) => (
-                    <div key={index} className="flex p-2 rounded-md hover:bg-gray-50 transition-colors">
-                      <div className={`w-10 h-10 rounded-full ${activity.color} flex items-center justify-center mr-3 shrink-0`}>
+                    <div key={index} className="flex p-2 rounded-md hover:bg-muted/50 transition-colors">
+                      <div className={`w-10 h-10 rounded-full ${activity.color} flex items-center justify-center ml-3 shrink-0`}>
                         <activity.icon className="h-5 w-5" />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm">
                           <span className="font-medium">
-                            {activity.type === 'add' && 'New'}
-                            {activity.type === 'edit' && 'Updated'}
-                            {activity.type === 'view' && 'Popular'}
+                            {activity.type === 'add' && 'إضافة'}
+                            {activity.type === 'edit' && 'تحديث'}
+                            {activity.type === 'view' && 'مشاهدة'}
                           </span>
                           {' '}
                           {activity.entity}: <span className="font-medium">{activity.title}</span>
                         </p>
-                        <p className="text-xs text-gray-500">{activity.time}</p>
+                        <p className="text-xs text-muted-foreground">{activity.time}</p>
                       </div>
                     </div>
                   ))}
@@ -186,26 +207,26 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
             
-            {/* Quick Actions */}
-            <Card>
+            {/* الإجراءات السريعة */}
+            <Card className="shadow-soft">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
+                <CardTitle className="text-lg">إجراءات سريعة</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <Link href="/admin/scholarships/create">
                     <Button className="w-full justify-start" variant="outline">
-                      <PlusCircle className="mr-2 h-4 w-4" /> Add Scholarship
+                      <PlusCircle className="ml-2 h-4 w-4" /> إضافة منحة جديدة
                     </Button>
                   </Link>
                   <Link href="/admin/posts/create">
                     <Button className="w-full justify-start" variant="outline">
-                      <PlusCircle className="mr-2 h-4 w-4" /> Create Blog Post
+                      <PlusCircle className="ml-2 h-4 w-4" /> إنشاء مقال جديد
                     </Button>
                   </Link>
                   <Link href="/admin/analytics">
                     <Button className="w-full justify-start" variant="outline">
-                      <Activity className="mr-2 h-4 w-4" /> View Analytics
+                      <Activity className="ml-2 h-4 w-4" /> عرض التحليلات
                     </Button>
                   </Link>
                 </div>
@@ -213,16 +234,16 @@ const AdminDashboard = () => {
             </Card>
           </div>
           
-          {/* Site Overview Chart */}
-          <Card>
+          {/* نظرة عامة على الموقع */}
+          <Card className="shadow-soft mb-6">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Site Overview</CardTitle>
+              <CardTitle className="text-lg">نظرة عامة على الموقع</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80 flex items-center justify-center bg-gray-50 rounded-md border border-dashed border-gray-300">
+              <div className="h-60 md:h-80 flex items-center justify-center bg-muted/30 rounded-md border border-dashed border-muted">
                 <div className="text-center">
-                  <BarChart2 className="h-12 w-12 mx-auto text-gray-400 mb-3" />
-                  <p className="text-gray-600">Analytics data will be displayed here</p>
+                  <BarChart2 className="h-10 w-10 md:h-12 md:w-12 mx-auto text-muted-foreground mb-3" />
+                  <p className="text-muted-foreground">سيتم عرض بيانات التحليلات هنا</p>
                 </div>
               </div>
             </CardContent>
