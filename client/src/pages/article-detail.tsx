@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useParams, Link } from 'wouter';
 import { queryClient } from '@/lib/queryClient';
+import { Helmet } from 'react-helmet';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -25,6 +26,7 @@ import { Post, User } from '@shared/schema';
 
 const ArticleDetail = () => {
   const { slug } = useParams();
+  const contentRef = useRef<HTMLDivElement>(null);
   
   const { data: post, isLoading, error } = useQuery<Post>({
     queryKey: [`/api/posts/slug/${slug}`],
@@ -39,22 +41,16 @@ const ArticleDetail = () => {
     enabled: !!post,
   });
 
-  // Increment view count (this happens automatically on the API side)
+  // Scroll to top when component mounts
   useEffect(() => {
-    // Set page metadata
+    window.scrollTo(0, 0);
+  }, [slug]);
+  
+  // Set page metadata
+  useEffect(() => {
     if (post) {
-      document.title = `${post.title} - FULLSCO Blog`;
-      
-      // Set meta description
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', post.excerpt || post.content.substring(0, 160));
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = post.excerpt || post.content.substring(0, 160);
-        document.head.appendChild(meta);
-      }
+      // Scroll to top when post data loads
+      window.scrollTo(0, 0);
     }
   }, [post]);
 

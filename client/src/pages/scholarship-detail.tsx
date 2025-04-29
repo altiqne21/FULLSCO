@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, Link } from 'wouter';
+import { Helmet } from 'react-helmet';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -18,6 +19,7 @@ import { Scholarship, Level, Country, Category } from '@shared/schema';
 
 const ScholarshipDetail = () => {
   const { slug } = useParams();
+  const contentRef = useRef<HTMLDivElement>(null);
   
   const { data: scholarship, isLoading, error } = useQuery<Scholarship>({
     queryKey: [`/api/scholarships/slug/${slug}`],
@@ -40,21 +42,16 @@ const ScholarshipDetail = () => {
     enabled: !!scholarship,
   });
 
-  // Set page metadata
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+  
+  // Set page metadata and scroll to top when data loads
   useEffect(() => {
     if (scholarship) {
-      document.title = `${scholarship.title} - FULLSCO Scholarship`;
-      
-      // You can add more metadata here when implementing SEO
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', scholarship.description);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = scholarship.description;
-        document.head.appendChild(meta);
-      }
+      // Scroll to top when scholarship data loads
+      window.scrollTo(0, 0);
     }
   }, [scholarship]);
 
@@ -98,11 +95,11 @@ const ScholarshipDetail = () => {
   if (error || !scholarship) {
     return (
       <div className="container mx-auto px-4 py-12 max-w-4xl text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Scholarship Not Found</h1>
-        <p className="text-gray-600 mb-8">We couldn't find the scholarship you're looking for.</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">لم يتم العثور على المنحة</h1>
+        <p className="text-gray-600 mb-8">لم نتمكن من العثور على المنحة التي تبحث عنها.</p>
         <Link href="/scholarships">
           <Button>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Scholarships
+            <ArrowLeft className="mr-2 h-4 w-4" /> العودة إلى المنح الدراسية
           </Button>
         </Link>
       </div>
@@ -115,7 +112,7 @@ const ScholarshipDetail = () => {
         <div className="mb-6">
           <Link href="/scholarships">
             <Button variant="outline" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Scholarships
+              <ArrowLeft className="mr-2 h-4 w-4" /> العودة إلى المنح الدراسية
             </Button>
           </Link>
           
@@ -152,7 +149,7 @@ const ScholarshipDetail = () => {
             <CardContent className="p-5">
               <div className="flex items-center mb-2">
                 <Globe className="h-5 w-5 text-primary mr-2" />
-                <h3 className="font-semibold">Host Country</h3>
+                <h3 className="font-semibold">البلد المضيف</h3>
               </div>
               <p>{getCountryName(scholarship.countryId)}</p>
             </CardContent>
@@ -162,7 +159,7 @@ const ScholarshipDetail = () => {
             <CardContent className="p-5">
               <div className="flex items-center mb-2">
                 <GraduationCap className="h-5 w-5 text-primary mr-2" />
-                <h3 className="font-semibold">Degree Level</h3>
+                <h3 className="font-semibold">الدرجة العلمية</h3>
               </div>
               <p>{getLevelName(scholarship.levelId)}</p>
             </CardContent>
@@ -172,9 +169,9 @@ const ScholarshipDetail = () => {
             <CardContent className="p-5">
               <div className="flex items-center mb-2">
                 <DollarSign className="h-5 w-5 text-primary mr-2" />
-                <h3 className="font-semibold">Funding</h3>
+                <h3 className="font-semibold">التمويل</h3>
               </div>
-              <p>{scholarship.amount || 'Varies'}</p>
+              <p>{scholarship.amount || 'متغير'}</p>
             </CardContent>
           </Card>
         </div>
