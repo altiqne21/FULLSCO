@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useIsMobile } from '@/hooks/use-mobile';
 import Sidebar from '@/components/admin/sidebar';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Menu } from 'lucide-react';
 import { 
   Table, 
@@ -44,15 +45,15 @@ export default function AdminUsers() {
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         {/* Sidebar for desktop */}
         {!isMobile && <Sidebar isMobileOpen={false} onClose={() => {}} />}
         
-        {/* Mobile Sidebar */}
-        {isMobile && <Sidebar isMobileOpen={sidebarOpen} onClose={closeSidebar} />}
+        {/* Mobile Sidebar - always render but control visibility via props */}
+        <Sidebar isMobileOpen={sidebarOpen} onClose={closeSidebar} />
         
         {/* Main Content */}
-        <main className={`flex-1 p-4 md:p-6 ${!isMobile ? 'mr-64' : ''}`}>
+        <main className={`flex-1 p-4 md:p-6 ${!isMobile ? 'md:mr-64' : ''}`}>
           {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             {isMobile && (
@@ -65,7 +66,7 @@ export default function AdminUsers() {
                 <Menu className="h-6 w-6" />
               </Button>
             )}
-            <h1 className="text-2xl font-bold">إدارة المستخدمين</h1>
+            <h1 className="text-xl md:text-2xl font-bold">إدارة المستخدمين</h1>
           </div>
           
           {/* Search & Controls */}
@@ -100,23 +101,25 @@ export default function AdminUsers() {
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>الاسم الكامل</TableHead>
-                        <TableHead>اسم المستخدم</TableHead>
-                        <TableHead>البريد الإلكتروني</TableHead>
-                        <TableHead>الدور</TableHead>
-                        <TableHead>تاريخ الإنشاء</TableHead>
+                        <TableHead className="whitespace-nowrap">الاسم الكامل</TableHead>
+                        <TableHead className="whitespace-nowrap">اسم المستخدم</TableHead>
+                        <TableHead className="whitespace-nowrap hidden md:table-cell">البريد الإلكتروني</TableHead>
+                        <TableHead className="whitespace-nowrap">الدور</TableHead>
+                        <TableHead className="whitespace-nowrap hidden md:table-cell">تاريخ الإنشاء</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredUsers.map((user) => (
                         <TableRow key={user.id}>
-                          <TableCell>{user.fullName || 'غير محدد'}</TableCell>
+                          <TableCell className="font-medium">{user.fullName || 'غير محدد'}</TableCell>
                           <TableCell>{user.username}</TableCell>
-                          <TableCell>{user.email}</TableCell>
+                          <TableCell className="hidden md:table-cell">{user.email}</TableCell>
                           <TableCell>
-                            {user.role === 'admin' ? 'مدير' : 'مستخدم'}
+                            <Badge variant={user.role === 'admin' ? 'secondary' : 'outline'}>
+                              {user.role === 'admin' ? 'مدير' : 'مستخدم'}
+                            </Badge>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="hidden md:table-cell">
                             {new Date(user.createdAt || '').toLocaleDateString('ar-EG')}
                           </TableCell>
                         </TableRow>
@@ -127,6 +130,27 @@ export default function AdminUsers() {
               )}
             </CardContent>
           </Card>
+          
+          {/* Mobile View Summary */}
+          <div className="mt-6 block md:hidden">
+            <h2 className="text-lg font-semibold mb-3">ملخص البيانات</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <h3 className="text-sm text-muted-foreground mb-1">إجمالي المستخدمين</h3>
+                  <p className="text-2xl font-bold">{filteredUsers.length}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <h3 className="text-sm text-muted-foreground mb-1">المدراء</h3>
+                  <p className="text-2xl font-bold">
+                    {filteredUsers.filter(user => user.role === 'admin').length}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </main>
       </div>
     </div>

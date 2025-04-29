@@ -103,7 +103,7 @@ const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
           "bg-sidebar flex flex-col border-r border-sidebar-border z-50 transition-transform duration-300 ease-in-out",
           isMobile 
             ? "fixed inset-y-0 right-0 w-64" 
-            : "w-64 h-screen"
+            : "hidden md:flex w-64 h-screen"
         )}
         style={{
           transform: isMobile 
