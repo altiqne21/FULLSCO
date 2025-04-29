@@ -154,7 +154,13 @@ const AdminScholarships = () => {
   return (
     <div className="bg-background min-h-screen relative overflow-x-hidden">
       {/* السايدبار للجوال */}
-      <Sidebar isMobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar 
+        isMobileOpen={sidebarOpen} 
+        onClose={() => {
+          console.log('Scholarships: closing sidebar');
+          setSidebarOpen(false);
+        }} 
+      />
       
       {/* المحتوى الرئيسي */}
       <div className={cn(
