@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,8 +7,10 @@ import { z } from "zod";
 import { useAuth } from "@/hooks/use-auth";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { slugify } from "@/lib/utils";
+import { slugify, cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import Sidebar from "@/components/admin/sidebar";
+import { Menu } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -49,6 +51,10 @@ const CreatePost = () => {
   const { isLoading: authLoading, isAuthenticated, user } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  
+  // إضافة حالة السايدبار للموبايل
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -135,22 +141,47 @@ const CreatePost = () => {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar />
+    <div className="bg-background min-h-screen relative overflow-x-hidden">
+      {/* السايدبار للجوال */}
+      <Sidebar 
+        isMobileOpen={sidebarOpen} 
+        onClose={() => {
+          console.log('CreatePost: closing sidebar');
+          setSidebarOpen(false);
+        }} 
+      />
 
-      <div className="flex-1 overflow-y-auto">
+      <div className={cn(
+        "transition-all duration-300",
+        isMobile ? "w-full" : "mr-64"
+      )}>
         <main className="p-6">
-          <div className="mb-6">
-            <Button
-              variant="outline"
-              className="mb-4"
-              onClick={() => navigate("/admin/posts")}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Posts
-            </Button>
-            <h1 className="text-2xl font-bold text-gray-900">
-              Create New Blog Post
-            </h1>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              {isMobile && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="ml-2" 
+                  onClick={() => setSidebarOpen(true)}
+                  aria-label="فتح القائمة"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              )}
+              <div>
+                <Button
+                  variant="outline"
+                  className="mb-4"
+                  onClick={() => navigate("/admin/posts")}
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" /> Back to Posts
+                </Button>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Create New Blog Post
+                </h1>
+              </div>
+            </div>
           </div>
 
           <Card>
