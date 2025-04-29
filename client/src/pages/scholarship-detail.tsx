@@ -138,7 +138,7 @@ const ScholarshipDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div className="absolute bottom-4 left-4">
             <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold">
-              Deadline: {scholarship.deadline || 'Ongoing'}
+              آخر موعد: {scholarship.deadline || 'مستمر'}
             </span>
           </div>
         </div>
@@ -228,16 +228,16 @@ const ScholarshipDetail = () => {
             
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold mb-4">Share This Scholarship</h3>
-                <div className="flex space-x-3">
+                <h3 className="text-lg font-bold mb-4">مشاركة هذه المنحة</h3>
+                <div className="flex space-x-0 gap-2">
                   <Button variant="outline" size="sm" className="flex-1">
-                    Facebook
+                    فيسبوك
                   </Button>
                   <Button variant="outline" size="sm" className="flex-1">
-                    Twitter
+                    تويتر
                   </Button>
                   <Button variant="outline" size="sm" className="flex-1">
-                    Email
+                    البريد
                   </Button>
                 </div>
               </CardContent>
@@ -248,7 +248,7 @@ const ScholarshipDetail = () => {
         {/* Related scholarships */}
         {relatedScholarships && relatedScholarships.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Related Scholarships</h2>
+            <h2 className="text-2xl font-bold mb-6">منح دراسية مشابهة</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedScholarships
                 .filter(s => s.id !== scholarship.id)
@@ -273,7 +273,7 @@ const ScholarshipDetail = () => {
                         <Badge variant="outline">{getCountryName(relatedScholarship.countryId)}</Badge>
                         <Link href={`/scholarships/${relatedScholarship.slug}`}>
                           <a className="text-sm font-medium text-primary hover:text-primary-700">
-                            Details
+                            التفاصيل
                           </a>
                         </Link>
                       </div>
@@ -291,24 +291,24 @@ const ScholarshipDetail = () => {
               <div className="flex items-start mb-4">
                 <FileText className="h-6 w-6 text-primary mr-3 mt-1" />
                 <div>
-                  <h3 className="text-lg font-bold mb-1">Application Resources</h3>
-                  <p className="text-gray-600">Check out our guides on how to apply for scholarships successfully.</p>
+                  <h3 className="text-lg font-bold mb-1">موارد التقديم</h3>
+                  <p className="text-gray-600">اطلع على أدلة كيفية التقديم للمنح الدراسية بنجاح.</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 <Link href="/articles/how-to-write-winning-scholarship-essay">
                   <Button variant="outline" className="w-full justify-start">
-                    Writing a Winning Essay
+                    كتابة مقال ناجح
                   </Button>
                 </Link>
                 <Link href="/articles/common-scholarship-application-mistakes">
                   <Button variant="outline" className="w-full justify-start">
-                    Common Application Mistakes
+                    أخطاء شائعة في التقديم
                   </Button>
                 </Link>
                 <Link href="/articles/how-to-prepare-scholarship-interview">
                   <Button variant="outline" className="w-full justify-start">
-                    Interview Preparation
+                    التحضير للمقابلة
                   </Button>
                 </Link>
               </div>
