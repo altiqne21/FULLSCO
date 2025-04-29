@@ -339,35 +339,5 @@ const Scholarships = () => {
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
             <h2 className="text-xl font-bold text-gray-900 mb-4">نصائح للتقديم على المنح الدراسية</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-4 border border-gray-100 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors">
-                <h3 className="font-medium text-lg mb-2">ابحث عن المؤهلات المطلوبة</h3>
-                <p className="text-gray-600 text-sm">تأكد من أنك تستوفي جميع متطلبات الأهلية قبل التقديم، بما في ذلك متطلبات الجنسية والمعدل الأكاديمي.</p>
-              </div>
-              <div className="p-4 border border-gray-100 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors">
-                <h3 className="font-medium text-lg mb-2">إعداد وثائق قوية</h3>
-                <p className="text-gray-600 text-sm">قم بإعداد وثائق تقديمك بعناية، بما في ذلك خطاب النية ورسائل التوصية والسيرة الذاتية.</p>
-              </div>
-              <div className="p-4 border border-gray-100 rounded-lg hover:border-primary hover:bg-primary/5 transition-colors">
-                <h3 className="font-medium text-lg mb-2">التقديم قبل الموعد النهائي</h3>
-                <p className="text-gray-600 text-sm">قدم طلبك قبل الموعد النهائي بوقت كافٍ لتجنب المشكلات التقنية وتأخير الإرسال.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* أرقام الصفحات (إذا لزم الأمر) */}
-          {scholarships && scholarships.length > 9 && (
-            <div className="flex justify-center mt-8">
-              <Button variant="outline" className="mx-1">السابق</Button>
-              <Button variant="outline" className="mx-1 bg-primary text-white">1</Button>
-              <Button variant="outline" className="mx-1">2</Button>
-              <Button variant="outline" className="mx-1">3</Button>
-              <Button variant="outline" className="mx-1">التالي</Button>
-            </div>
-          )}
-        </div>
-      </main>
-    </>
-  );
-};
-
-export default Scholarships;
+              <div className="p-
+(Content truncated due to size limit. Use line ranges to read in chunks)

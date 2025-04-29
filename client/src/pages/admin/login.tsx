@@ -24,26 +24,30 @@ const loginSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
-
 export default function Login() {
-  const { login, loginStatus, isAuthenticated } = useAuth();
+  const { login, loginStatus, isAuthenticated, isLoading: authLoading } = useAuth(); // Add authLoading
   const { toast } = useToast();
   const [, navigate] = useLocation();
   
-  // Redirect if already logged in
-  if (isAuthenticated) {
-    navigate('/admin');
-    return null;
-  }
-  
+  // Initialize form hook unconditionally at the top level
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: '',
-      password: '',
+      username: ".",
+      password: ".",
     },
   });
 
+  // Show loading state while checking authentication
+  if (authLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-gray-50">Loading...</div>;
+  }
+
+  // Redirect if already logged in (after loading check)
+  if (isAuthenticated) {
+    navigate("/admin");
+    return null;
+  }
   const onSubmit = (data: LoginFormValues) => {
     login(data);
   };
