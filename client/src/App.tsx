@@ -9,6 +9,10 @@ import ArticleDetail from "@/pages/article-detail";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminScholarships from "@/pages/admin/scholarships";
 import AdminPosts from "@/pages/admin/posts";
+import AdminUsers from "@/pages/admin/users";
+import AdminSettings from "@/pages/admin/settings";
+import AdminSEO from "@/pages/admin/seo";
+import AdminAnalytics from "@/pages/admin/analytics";
 import CreateScholarship from "@/pages/admin/create-scholarship";
 import CreatePost from "@/pages/admin/create-post";
 import AdminLogin from "@/pages/admin/login";
@@ -23,7 +27,11 @@ function App() {
 
   // Add metadata to document head
   useEffect(() => {
-    document.title = "FULLSCO - Scholarship Blog";
+    document.title = "FULLSCO - منصة المنح الدراسية";
+    
+    // تعيين اتجاه الصفحة للغة العربية
+    document.documentElement.dir = "rtl";
+    document.documentElement.lang = "ar";
   }, []);
 
   return (
@@ -42,6 +50,10 @@ function App() {
         <Route path="/admin" component={AdminDashboard} />
         <Route path="/admin/scholarships" component={AdminScholarships} />
         <Route path="/admin/posts" component={AdminPosts} />
+        <Route path="/admin/users" component={AdminUsers} />
+        <Route path="/admin/settings" component={AdminSettings} />
+        <Route path="/admin/seo" component={AdminSEO} />
+        <Route path="/admin/analytics" component={AdminAnalytics} />
         <Route path="/admin/scholarships/create" component={CreateScholarship} />
         <Route path="/admin/posts/create" component={CreatePost} />
         
