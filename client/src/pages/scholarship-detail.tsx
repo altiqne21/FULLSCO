@@ -181,13 +181,13 @@ const ScholarshipDetail = () => {
           <div className="lg:col-span-2">
             <Card>
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-4">Description</h2>
+                <h2 className="text-2xl font-bold mb-4">الوصف</h2>
                 <div className="prose max-w-none">
                   <p className="mb-6">{scholarship.description}</p>
                   
                   {scholarship.requirements && (
                     <>
-                      <h3 className="text-xl font-bold mb-3">Requirements</h3>
+                      <h3 className="text-xl font-bold mb-3">المتطلبات</h3>
                       <p className="mb-6">{scholarship.requirements}</p>
                     </>
                   )}
@@ -200,12 +200,12 @@ const ScholarshipDetail = () => {
                       className="inline-flex"
                     >
                       <Button className="mr-4" size="lg">
-                        Apply Now <ExternalLink className="ml-2 h-4 w-4" />
+                        تقديم طلب <ExternalLink className="ml-2 h-4 w-4" />
                       </Button>
                     </a>
                     
                     <Button variant="outline" size="lg">
-                      <Calendar className="mr-2 h-4 w-4" /> Add to Calendar
+                      <Calendar className="mr-2 h-4 w-4" /> إضافة إلى التقويم
                     </Button>
                   </div>
                 </div>
@@ -216,11 +216,11 @@ const ScholarshipDetail = () => {
           <div>
             <Card className="mb-6">
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold mb-4">Key Dates</h3>
+                <h3 className="text-lg font-bold mb-4">تواريخ مهمة</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Application Deadline:</span>
-                    <span className="font-medium">{scholarship.deadline || 'Ongoing'}</span>
+                    <span className="text-gray-600">آخر موعد للتقديم:</span>
+                    <span className="font-medium">{scholarship.deadline || 'مستمر'}</span>
                   </div>
                 </div>
               </CardContent>

@@ -64,7 +64,7 @@ const Newsletter = () => {
   };
 
   return (
-    <section className="bg-primary py-16 relative overflow-hidden">
+    <section id="newsletter" className="bg-primary py-16 relative overflow-hidden">
       {/* زخارف خلفية */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-white/20"></div>

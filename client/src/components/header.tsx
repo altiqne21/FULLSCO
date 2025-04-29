@@ -172,13 +172,13 @@ const Header = () => {
                 </Link>
               )}
               
-              <Link href="/subscribe">
+              <a href="#newsletter">
                 <Button 
                   className="button-hover rounded-full bg-accent font-medium text-white shadow-soft transition-all hover:bg-accent/90"
                 >
                   اشترك الآن
                 </Button>
-              </Link>
+              </a>
               
               {/* Mobile menu button */}
               <Button
@@ -253,9 +253,9 @@ const Header = () => {
                   <Button variant="outline" className="w-full">تسجيل الدخول</Button>
                 </Link>
               )}
-              <Link href="/subscribe" className="flex-1">
+              <a href="#newsletter" className="flex-1">
                 <Button className="w-full bg-accent text-white hover:bg-accent/90">اشترك الآن</Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
