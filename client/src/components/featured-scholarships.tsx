@@ -18,13 +18,13 @@ const FeaturedScholarships = () => {
     queryKey: ['/api/countries'],
   });
 
-  const getCountryName = (countryId?: number) => {
+  const getCountryName = (countryId: number | null) => {
     if (!countryId || !countries) return '';
     const country = countries.find(c => c.id === countryId);
     return country?.name || '';
   };
 
-  const getLevelName = (levelId?: number) => {
+  const getLevelName = (levelId: number | null) => {
     if (!levelId || !levels) return '';
     const level = levels.find(l => l.id === levelId);
     return level?.name || '';
@@ -35,7 +35,7 @@ const FeaturedScholarships = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">Featured Scholarships</h2>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">منح دراسية مميزة</h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
@@ -75,12 +75,13 @@ const FeaturedScholarships = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">Featured Scholarships</h2>
-          <Link href="/scholarships">
-            <a className="text-primary hover:text-primary-700 font-medium flex items-center">
-              View all <ArrowRight className="ml-1 h-4 w-4" />
-            </a>
-          </Link>
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">منح دراسية مميزة</h2>
+          <div 
+            className="text-primary hover:text-primary-700 font-medium flex items-center cursor-pointer"
+            onClick={() => window.location.href = '/scholarships'}
+          >
+            عرض الكل <ArrowRight className="ml-1 h-4 w-4" />
+          </div>
         </div>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -108,10 +109,10 @@ const FeaturedScholarships = () => {
                   <span className="mx-2 h-1 w-1 rounded-full bg-gray-300"></span>
                   <Badge variant="secondary">{getLevelName(scholarship.levelId)}</Badge>
                 </div>
-                <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-primary">
-                  <Link href={`/scholarships/${scholarship.slug}`}>
-                    <a>{scholarship.title}</a>
-                  </Link>
+                <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-primary cursor-pointer"
+                  onClick={() => window.location.href = `/scholarships/${scholarship.slug}`}
+                >
+                  {scholarship.title}
                 </h3>
                 <p className="mb-4 text-sm text-gray-600 line-clamp-2">
                   {scholarship.description}
@@ -120,11 +121,12 @@ const FeaturedScholarships = () => {
                   <span className="text-sm font-medium text-gray-700">
                     <DollarSign className="mr-1 h-4 w-4 inline text-secondary-500" /> {scholarship.amount || 'Varies'}
                   </span>
-                  <Link href={`/scholarships/${scholarship.slug}`}>
-                    <a className="flex items-center text-sm font-medium text-primary hover:text-primary-700">
-                      Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                    </a>
-                  </Link>
+                  <div 
+                    className="flex items-center text-sm font-medium text-primary hover:text-primary-700 cursor-pointer"
+                    onClick={() => window.location.href = `/scholarships/${scholarship.slug}`}
+                  >
+                    المزيد <ArrowRight className="ml-1 h-4 w-4" />
+                  </div>
                 </div>
               </CardContent>
             </Card>

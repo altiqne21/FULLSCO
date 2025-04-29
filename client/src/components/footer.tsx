@@ -16,18 +16,18 @@ const Footer = () => {
               دليلك الشامل لفرص المنح الدراسية حول العالم. نساعد الطلاب على إيجاد وتقديم طلبات المنح الدراسية لتحقيق أحلامهم الأكاديمية.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-primary">
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
+              </div>
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
+              </div>
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
+              </div>
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Linkedin className="h-5 w-5" />
-              </a>
+              </div>
             </div>
           </div>
           
