@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { ArrowLeft } from 'lucide-react'; // Changed ArrowRight to ArrowLeft for RTL
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { SuccessStory } from '@shared/schema';
@@ -15,8 +15,8 @@ const SuccessStories = () => {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">قصص نجاح</h2> {/* Translated */}
-            <p className="text-gray-600 max-w-2xl mx-auto">اقرأ كيف نجح طلاب آخرون في الحصول على منح دراسية ومتابعة أحلامهم الأكاديمية.</p> {/* Translated */}
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">Success Stories</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Read about how other students successfully secured scholarships and are pursuing their academic dreams.</p>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
             {[1, 2].map((i) => (
@@ -42,10 +42,9 @@ const SuccessStories = () => {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">قصص نجاح</h2> {/* Translated */}
-            <p className="text-gray-600 max-w-2xl mx-auto mb-4">اقرأ كيف نجح طلاب آخرون في الحصول على منح دراسية ومتابعة أحلامهم الأكاديمية.</p> {/* Translated */}
-            {error && <p className="text-red-500">فشل تحميل قصص النجاح. يرجى المحاولة مرة أخرى لاحقاً.</p>} {/* Translated */}
-            {!error && (!stories || stories.length === 0) && <p className="text-gray-500">لا توجد قصص نجاح لعرضها حالياً.</p>} {/* Added message for no stories */}
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">Success Stories</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto mb-4">Read about how other students successfully secured scholarships and are pursuing their academic dreams.</p>
+            {error && <p className="text-red-500">Failed to load success stories. Please try again later.</p>}
           </div>
         </div>
       </section>
@@ -56,8 +55,8 @@ const SuccessStories = () => {
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">قصص نجاح</h2> {/* Translated */}
-          <p className="text-gray-600 max-w-2xl mx-auto">اقرأ كيف نجح طلاب آخرون في الحصول على منح دراسية ومتابعة أحلامهم الأكاديمية.</p> {/* Translated */}
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">Success Stories</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">Read about how other students successfully secured scholarships and are pursuing their academic dreams.</p>
         </div>
         
         <div className="grid gap-8 md:grid-cols-2">
@@ -65,23 +64,23 @@ const SuccessStories = () => {
             <div key={story.id} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200 flex flex-col md:flex-row">
               <div className="md:w-2/5">
                 <img 
-                  src={story.imageUrl || "https://randomuser.me/api/portraits/men/75.jpg"} // Fallback image
-                  alt={story.name || 'صورة قصة نجاح'} // Translated fallback alt text
+                  src={story.imageUrl || "https://randomuser.me/api/portraits/men/75.jpg"}
+                  alt={story.name}
                   className="h-64 w-full object-cover md:h-full success-story-image"
                 />
               </div>
               <div className="p-6 md:w-3/5">
                 <Badge variant="primary" className="inline-block mb-2 rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800">
-                  {story.scholarshipName} {/* Dynamic content - assumed to be in Arabic from API */}
+                  {story.scholarshipName}
                 </Badge>
-                <h3 className="text-xl font-bold mb-2">{story.name}</h3> {/* Dynamic content - assumed to be in Arabic from API */}
-                <p className="text-sm text-gray-500 mb-3">{story.title}</p> {/* Dynamic content - assumed to be in Arabic from API */}
+                <h3 className="text-xl font-bold mb-2">{story.name}</h3>
+                <p className="text-sm text-gray-500 mb-3">{story.title}</p>
                 <p className="text-gray-600 mb-4 line-clamp-4">
-                  {story.content} {/* Dynamic content - assumed to be in Arabic from API */}
+                  {story.content}
                 </p>
                 <Link href={`/success-stories/${story.slug}`}>
                   <a className="text-primary hover:text-primary-700 font-medium flex items-center text-sm">
-                    اقرأ القصة كاملة <ArrowLeft className="mr-1 h-4 w-4" /> {/* Translated & RTL adjusted */}
+                    Read full story <ArrowRight className="ml-1 h-4 w-4" />
                   </a>
                 </Link>
               </div>
@@ -92,7 +91,7 @@ const SuccessStories = () => {
         <div className="mt-8 text-center">
           <Link href="/success-stories">
             <Button>
-              عرض المزيد من قصص النجاح {/* Translated */}
+              View More Success Stories
             </Button>
           </Link>
         </div>
@@ -102,4 +101,3 @@ const SuccessStories = () => {
 };
 
 export default SuccessStories;
-

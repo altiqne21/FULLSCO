@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { ArrowLeft, Eye } from 'lucide-react'; // Changed ArrowRight to ArrowLeft for RTL
+import { ArrowRight, Eye } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -17,9 +17,9 @@ const LatestArticles = () => {
   });
 
   const getAuthorName = (authorId?: number) => {
-    if (!authorId || !users) return 'فريق FULLSCO'; // Translated
+    if (!authorId || !users) return 'FULLSCO Team';
     const author = users.find(u => u.id === authorId);
-    return author?.fullName || 'فريق FULLSCO'; // Translated
+    return author?.fullName || 'FULLSCO Team';
   };
 
   if (isLoading) {
@@ -27,7 +27,7 @@ const LatestArticles = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">أحدث المقالات والأدلة</h2> {/* Translated */}
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">Latest Articles & Guides</h2>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
@@ -52,8 +52,8 @@ const LatestArticles = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">أحدث المقالات والأدلة</h2> {/* Translated */}
-            <p className="text-red-500">فشل تحميل المقالات. يرجى المحاولة مرة أخرى لاحقاً.</p> {/* Translated */}
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">Latest Articles & Guides</h2>
+            <p className="text-red-500">Failed to load articles. Please try again later.</p>
           </div>
         </div>
       </section>
@@ -64,10 +64,10 @@ const LatestArticles = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">أحدث المقالات والأدلة</h2> {/* Translated */}
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">Latest Articles & Guides</h2>
           <Link href="/articles">
             <a className="text-primary hover:text-primary-700 font-medium flex items-center">
-              عرض الكل <ArrowLeft className="mr-1 h-4 w-4" /> {/* Translated & RTL adjusted */}
+              View all <ArrowRight className="ml-1 h-4 w-4" />
             </a>
           </Link>
         </div>
@@ -82,10 +82,10 @@ const LatestArticles = () => {
               />
               <div className="p-5">
                 <div className="mb-2 flex items-center">
-                  <Badge variant="secondary" className="rounded-full">دليل</Badge> {/* Translated */}
+                  <Badge variant="secondary" className="rounded-full">Guide</Badge>
                   <span className="mx-2 text-xs text-gray-500">{formatDate(post.createdAt)}</span>
                   <span className="text-xs text-gray-500 flex items-center">
-                    <Eye className="ml-1 h-3 w-3" /> {post.views || 0} {/* RTL adjusted */}
+                    <Eye className="mr-1 h-3 w-3" /> {post.views || 0}
                   </span>
                 </div>
                 <h3 className="mb-2 text-xl font-bold text-gray-900">
@@ -97,7 +97,7 @@ const LatestArticles = () => {
                   {post.excerpt || post.content}
                 </p>
                 <div className="flex items-center">
-                  <Avatar className="h-8 w-8 ml-2"> {/* RTL adjusted */}
+                  <Avatar className="h-8 w-8 mr-2">
                     <AvatarImage src="https://randomuser.me/api/portraits/men/1.jpg" alt={getAuthorName(post.authorId)} />
                     <AvatarFallback>{getInitials(getAuthorName(post.authorId))}</AvatarFallback>
                   </Avatar>
@@ -113,4 +113,3 @@ const LatestArticles = () => {
 };
 
 export default LatestArticles;
-

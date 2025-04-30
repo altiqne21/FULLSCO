@@ -36,27 +36,30 @@ const AdminDashboard = () => {
   }, [authLoading, isAuthenticated, navigate]);
 
   // Fetch statistics
-  const { data: scholarships, isLoading: scholarshipsLoading } = useQuery<Scholarship[]>({
-    queryKey: ["/api/scholarships"],
+  const { data: scholarships } = useQuery({
+    queryKey: ['/api/scholarships'],
     enabled: isAuthenticated,
   });
 
-  const { data: posts, isLoading: postsLoading } = useQuery<Post[]>({
-    queryKey: ["/api/posts"],
+  const { data: posts } = useQuery({
+    queryKey: ['/api/posts'],
     enabled: isAuthenticated,
   });
 
-  const { data: users, isLoading: usersLoading } = useQuery<User[]>({
-    queryKey: ["/api/users"],
+  const { data: users } = useQuery({
+    queryKey: ['/api/users'],
     enabled: isAuthenticated,
   });
 
-  const { data: subscribers, isLoading: subscribersLoading } = useQuery<Subscriber[]>({
-    queryKey: ["/api/subscribers"],
+  const { data: subscribers } = useQuery({
+    queryKey: ['/api/subscribers'],
     enabled: isAuthenticated,
   });
 
-  // Define stats and recentActivity after checking authentication and loading states
+  if (authLoading || !isAuthenticated) {
+    return <div className="min-h-screen flex items-center justify-center bg-gray-100">جاري التحميل...</div>;
+  }
+
   const stats = [
     {
       title: "إجمالي المنح",
@@ -119,15 +122,10 @@ const AdminDashboard = () => {
     }
   ];
 
-  if (authLoading || !isAuthenticated || scholarshipsLoading || postsLoading || usersLoading || subscribersLoading) {
-    return <div className="min-h-screen flex items-center justify-center bg-gray-100">جاري التحميل...</div>;
-  }
-
   return (
     <div className="bg-background min-h-screen relative overflow-x-hidden">
       {/* السايدبار للجوال */}
       <Sidebar 
-        isMobile={isMobile} // Pass isMobile as a prop
         isMobileOpen={sidebarOpen} 
         onClose={() => {
           console.log('Dashboard: closing sidebar');

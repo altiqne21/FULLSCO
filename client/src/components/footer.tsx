@@ -13,21 +13,21 @@ const Footer = () => {
               </span>
             </Link>
             <p className="text-gray-400 mb-4">
-              دليلك الشامل لفرص المنح الدراسية حول العالم. نساعد الطلاب في العثور على المنح الدراسية والتقديم عليها لتحقيق أحلامهم الأكاديمية.
+              دليلك الشامل لفرص المنح الدراسية حول العالم. نساعد الطلاب على إيجاد وتقديم طلبات المنح الدراسية لتحقيق أحلامهم الأكاديمية.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-primary">
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
+              </div>
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
+              </div>
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-primary">
+              </div>
+              <div className="text-gray-400 hover:text-primary cursor-pointer">
                 <Linkedin className="h-5 w-5" />
-              </a>
+              </div>
             </div>
           </div>
           
@@ -35,34 +35,34 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">روابط سريعة</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/">
-                  <a className="text-gray-400 hover:text-white">الرئيسية</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/'}>
+                  الرئيسية
+                </div>
               </li>
               <li>
-                <Link href="/scholarships">
-                  <a className="text-gray-400 hover:text-white">المنح الدراسية</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships'}>
+                  المنح الدراسية
+                </div>
               </li>
               <li>
-                <Link href="/articles">
-                  <a className="text-gray-400 hover:text-white">المدونة</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/articles'}>
+                  المدونة
+                </div>
               </li>
               <li>
-                <Link href="/success-stories">
-                  <a className="text-gray-400 hover:text-white">قصص نجاح</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/success-stories'}>
+                  قصص نجاح
+                </div>
               </li>
               <li>
-                <Link href="/about">
-                  <a className="text-gray-400 hover:text-white">عن الموقع</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/about'}>
+                  من نحن
+                </div>
               </li>
               <li>
-                <Link href="/contact">
-                  <a className="text-gray-400 hover:text-white">اتصل بنا</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/contact'}>
+                  اتصل بنا
+                </div>
               </li>
             </ul>
           </div>
@@ -71,34 +71,34 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">المنح الدراسية</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/scholarships?level=bachelor">
-                  <a className="text-gray-400 hover:text-white">بكالوريوس</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships?level=bachelor'}>
+                  المرحلة الجامعية
+                </div>
               </li>
               <li>
-                <Link href="/scholarships?level=masters">
-                  <a className="text-gray-400 hover:text-white">ماجستير</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships?level=masters'}>
+                  الماجستير
+                </div>
               </li>
               <li>
-                <Link href="/scholarships?level=phd">
-                  <a className="text-gray-400 hover:text-white">دكتوراه</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships?level=phd'}>
+                  الدكتوراه
+                </div>
               </li>
               <li>
-                <Link href="/scholarships?funded=true">
-                  <a className="text-gray-400 hover:text-white">تمويل كامل</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships?funded=true'}>
+                  منح ممولة بالكامل
+                </div>
               </li>
               <li>
-                <Link href="/scholarships">
-                  <a className="text-gray-400 hover:text-white">حسب الدولة</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships'}>
+                  حسب البلد
+                </div>
               </li>
               <li>
-                <Link href="/scholarships?field=all">
-                  <a className="text-gray-400 hover:text-white">حسب التخصص</a>
-                </Link>
+                <div className="text-gray-400 hover:text-white cursor-pointer" onClick={() => window.location.href = '/scholarships?field=all'}>
+                  حسب مجال الدراسة
+                </div>
               </li>
             </ul>
           </div>
@@ -107,15 +107,15 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">اتصل بنا</h3>
             <ul className="space-y-2">
               <li className="flex items-start">
-                <Mail className="ml-2 mt-1 h-4 w-4 text-primary" /> {/* Changed mr-2 to ml-2 for RTL */} 
+                <Mail className="mr-2 mt-1 h-4 w-4 text-primary" />
                 <span className="text-gray-400">info@fullsco.com</span>
               </li>
               <li className="flex items-start">
-                <Phone className="ml-2 mt-1 h-4 w-4 text-primary" /> {/* Changed mr-2 to ml-2 for RTL */} 
+                <Phone className="mr-2 mt-1 h-4 w-4 text-primary" />
                 <span className="text-gray-400">+1 (555) 123-4567</span>
               </li>
               <li className="flex items-start">
-                <MapPin className="ml-2 mt-1 h-4 w-4 text-primary" /> {/* Changed mr-2 to ml-2 for RTL */} 
+                <MapPin className="mr-2 mt-1 h-4 w-4 text-primary" />
                 <span className="text-gray-400">123 Education Lane, Academic City, CA 90210</span>
               </li>
             </ul>
@@ -125,18 +125,27 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-6">
           <div className="flex flex-col md:flex-row md:justify-between items-center">
             <p className="text-sm text-gray-400">
-              &copy; {new Date().getFullYear()} FULLSCO. جميع الحقوق محفوظة.
+              &copy; {new Date().getFullYear()} FULLSCO. All rights reserved.
             </p>
             <div className="flex space-x-4 mt-4 md:mt-0">
-              <Link href="/privacy">
-                <a className="text-sm text-gray-400 hover:text-white">سياسة الخصوصية</a>
-              </Link>
-              <Link href="/terms">
-                <a className="text-sm text-gray-400 hover:text-white">شروط الخدمة</a>
-              </Link>
-              <Link href="/cookies">
-                <a className="text-sm text-gray-400 hover:text-white">سياسة ملفات الارتباط</a>
-              </Link>
+              <div 
+                className="text-sm text-gray-400 hover:text-white cursor-pointer"
+                onClick={() => window.location.href = '/privacy'}
+              >
+                سياسة الخصوصية
+              </div>
+              <div 
+                className="text-sm text-gray-400 hover:text-white cursor-pointer"
+                onClick={() => window.location.href = '/terms'}
+              >
+                شروط الاستخدام
+              </div>
+              <div 
+                className="text-sm text-gray-400 hover:text-white cursor-pointer"
+                onClick={() => window.location.href = '/cookies'}
+              >
+                سياسة ملفات تعريف الارتباط
+              </div>
             </div>
           </div>
         </div>
@@ -146,4 +155,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
