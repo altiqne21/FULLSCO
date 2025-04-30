@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, Link } from 'wouter';
+import { Helmet } from 'react-helmet';
 import { 
   ArrowLeft, 
   Calendar, 
@@ -18,6 +19,7 @@ import { Scholarship, Level, Country, Category } from '@shared/schema';
 
 const ScholarshipDetail = () => {
   const { slug } = useParams();
+  const contentRef = useRef<HTMLDivElement>(null);
   
   const { data: scholarship, isLoading, error } = useQuery<Scholarship>({
     queryKey: [`/api/scholarships/slug/${slug}`],
@@ -40,37 +42,32 @@ const ScholarshipDetail = () => {
     enabled: !!scholarship,
   });
 
-  // Set page metadata
+  // Scroll to top when component mounts or slug changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+  
+  // Set page metadata and scroll to top when data loads
   useEffect(() => {
     if (scholarship) {
-      document.title = `${scholarship.title} - FULLSCO Scholarship`;
-      
-      // You can add more metadata here when implementing SEO
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', scholarship.description);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = scholarship.description;
-        document.head.appendChild(meta);
-      }
+      // Scroll to top when scholarship data loads
+      window.scrollTo(0, 0);
     }
   }, [scholarship]);
 
-  const getCountryName = (countryId?: number) => {
+  const getCountryName = (countryId?: number | null) => {
     if (!countryId || !countries) return '';
     const country = countries.find(c => c.id === countryId);
     return country?.name || '';
   };
 
-  const getLevelName = (levelId?: number) => {
+  const getLevelName = (levelId?: number | null) => {
     if (!levelId || !levels) return '';
     const level = levels.find(l => l.id === levelId);
     return level?.name || '';
   };
 
-  const getCategoryName = (categoryId?: number) => {
+  const getCategoryName = (categoryId?: number | null) => {
     if (!categoryId || !categories) return '';
     const category = categories.find(c => c.id === categoryId);
     return category?.name || '';
@@ -98,11 +95,11 @@ const ScholarshipDetail = () => {
   if (error || !scholarship) {
     return (
       <div className="container mx-auto px-4 py-12 max-w-4xl text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Scholarship Not Found</h1>
-        <p className="text-gray-600 mb-8">We couldn't find the scholarship you're looking for.</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">لم يتم العثور على المنحة</h1>
+        <p className="text-gray-600 mb-8">لم نتمكن من العثور على المنحة التي تبحث عنها.</p>
         <Link href="/scholarships">
           <Button>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Scholarships
+            <ArrowLeft className="mr-2 h-4 w-4" /> العودة إلى المنح الدراسية
           </Button>
         </Link>
       </div>
@@ -115,7 +112,7 @@ const ScholarshipDetail = () => {
         <div className="mb-6">
           <Link href="/scholarships">
             <Button variant="outline" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Scholarships
+              <ArrowLeft className="mr-2 h-4 w-4" /> العودة إلى المنح الدراسية
             </Button>
           </Link>
           
@@ -141,7 +138,7 @@ const ScholarshipDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
           <div className="absolute bottom-4 left-4">
             <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold">
-              Deadline: {scholarship.deadline || 'Ongoing'}
+              آخر موعد: {scholarship.deadline || 'مستمر'}
             </span>
           </div>
         </div>
@@ -152,7 +149,7 @@ const ScholarshipDetail = () => {
             <CardContent className="p-5">
               <div className="flex items-center mb-2">
                 <Globe className="h-5 w-5 text-primary mr-2" />
-                <h3 className="font-semibold">Host Country</h3>
+                <h3 className="font-semibold">البلد المضيف</h3>
               </div>
               <p>{getCountryName(scholarship.countryId)}</p>
             </CardContent>
@@ -162,7 +159,7 @@ const ScholarshipDetail = () => {
             <CardContent className="p-5">
               <div className="flex items-center mb-2">
                 <GraduationCap className="h-5 w-5 text-primary mr-2" />
-                <h3 className="font-semibold">Degree Level</h3>
+                <h3 className="font-semibold">الدرجة العلمية</h3>
               </div>
               <p>{getLevelName(scholarship.levelId)}</p>
             </CardContent>
@@ -172,9 +169,9 @@ const ScholarshipDetail = () => {
             <CardContent className="p-5">
               <div className="flex items-center mb-2">
                 <DollarSign className="h-5 w-5 text-primary mr-2" />
-                <h3 className="font-semibold">Funding</h3>
+                <h3 className="font-semibold">التمويل</h3>
               </div>
-              <p>{scholarship.amount || 'Varies'}</p>
+              <p>{scholarship.amount || 'متغير'}</p>
             </CardContent>
           </Card>
         </div>
@@ -184,13 +181,13 @@ const ScholarshipDetail = () => {
           <div className="lg:col-span-2">
             <Card>
               <CardContent className="p-6">
-                <h2 className="text-2xl font-bold mb-4">Description</h2>
+                <h2 className="text-2xl font-bold mb-4">الوصف</h2>
                 <div className="prose max-w-none">
                   <p className="mb-6">{scholarship.description}</p>
                   
                   {scholarship.requirements && (
                     <>
-                      <h3 className="text-xl font-bold mb-3">Requirements</h3>
+                      <h3 className="text-xl font-bold mb-3">المتطلبات</h3>
                       <p className="mb-6">{scholarship.requirements}</p>
                     </>
                   )}
@@ -203,12 +200,12 @@ const ScholarshipDetail = () => {
                       className="inline-flex"
                     >
                       <Button className="mr-4" size="lg">
-                        Apply Now <ExternalLink className="ml-2 h-4 w-4" />
+                        تقديم طلب <ExternalLink className="ml-2 h-4 w-4" />
                       </Button>
                     </a>
                     
                     <Button variant="outline" size="lg">
-                      <Calendar className="mr-2 h-4 w-4" /> Add to Calendar
+                      <Calendar className="mr-2 h-4 w-4" /> إضافة إلى التقويم
                     </Button>
                   </div>
                 </div>
@@ -219,11 +216,11 @@ const ScholarshipDetail = () => {
           <div>
             <Card className="mb-6">
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold mb-4">Key Dates</h3>
+                <h3 className="text-lg font-bold mb-4">تواريخ مهمة</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Application Deadline:</span>
-                    <span className="font-medium">{scholarship.deadline || 'Ongoing'}</span>
+                    <span className="text-gray-600">آخر موعد للتقديم:</span>
+                    <span className="font-medium">{scholarship.deadline || 'مستمر'}</span>
                   </div>
                 </div>
               </CardContent>
@@ -231,16 +228,16 @@ const ScholarshipDetail = () => {
             
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-bold mb-4">Share This Scholarship</h3>
-                <div className="flex space-x-3">
+                <h3 className="text-lg font-bold mb-4">مشاركة هذه المنحة</h3>
+                <div className="flex space-x-0 gap-2">
                   <Button variant="outline" size="sm" className="flex-1">
-                    Facebook
+                    فيسبوك
                   </Button>
                   <Button variant="outline" size="sm" className="flex-1">
-                    Twitter
+                    تويتر
                   </Button>
                   <Button variant="outline" size="sm" className="flex-1">
-                    Email
+                    البريد
                   </Button>
                 </div>
               </CardContent>
@@ -251,7 +248,7 @@ const ScholarshipDetail = () => {
         {/* Related scholarships */}
         {relatedScholarships && relatedScholarships.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Related Scholarships</h2>
+            <h2 className="text-2xl font-bold mb-6">منح دراسية مشابهة</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedScholarships
                 .filter(s => s.id !== scholarship.id)
@@ -276,7 +273,7 @@ const ScholarshipDetail = () => {
                         <Badge variant="outline">{getCountryName(relatedScholarship.countryId)}</Badge>
                         <Link href={`/scholarships/${relatedScholarship.slug}`}>
                           <a className="text-sm font-medium text-primary hover:text-primary-700">
-                            Details
+                            التفاصيل
                           </a>
                         </Link>
                       </div>
@@ -294,24 +291,24 @@ const ScholarshipDetail = () => {
               <div className="flex items-start mb-4">
                 <FileText className="h-6 w-6 text-primary mr-3 mt-1" />
                 <div>
-                  <h3 className="text-lg font-bold mb-1">Application Resources</h3>
-                  <p className="text-gray-600">Check out our guides on how to apply for scholarships successfully.</p>
+                  <h3 className="text-lg font-bold mb-1">موارد التقديم</h3>
+                  <p className="text-gray-600">اطلع على أدلة كيفية التقديم للمنح الدراسية بنجاح.</p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 <Link href="/articles/how-to-write-winning-scholarship-essay">
                   <Button variant="outline" className="w-full justify-start">
-                    Writing a Winning Essay
+                    كتابة مقال ناجح
                   </Button>
                 </Link>
                 <Link href="/articles/common-scholarship-application-mistakes">
                   <Button variant="outline" className="w-full justify-start">
-                    Common Application Mistakes
+                    أخطاء شائعة في التقديم
                   </Button>
                 </Link>
                 <Link href="/articles/how-to-prepare-scholarship-interview">
                   <Button variant="outline" className="w-full justify-start">
-                    Interview Preparation
+                    التحضير للمقابلة
                   </Button>
                 </Link>
               </div>

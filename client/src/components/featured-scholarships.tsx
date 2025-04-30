@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { ArrowRight, DollarSign } from 'lucide-react';
+import { ArrowLeft, DollarSign } from 'lucide-react'; // Changed ArrowRight to ArrowLeft for RTL
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Scholarship, Level, Country } from '@shared/schema';
@@ -35,7 +35,7 @@ const FeaturedScholarships = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">Featured Scholarships</h2>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">منح دراسية مميزة</h2> {/* Translated */} 
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
@@ -63,8 +63,8 @@ const FeaturedScholarships = () => {
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">Featured Scholarships</h2>
-            <p className="text-red-500">Failed to load scholarships. Please try again later.</p>
+            <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">منح دراسية مميزة</h2> {/* Translated */} 
+            <p className="text-red-500">فشل تحميل المنح الدراسية. يرجى المحاولة مرة أخرى لاحقاً.</p> {/* Translated */} 
           </div>
         </div>
       </section>
@@ -75,10 +75,10 @@ const FeaturedScholarships = () => {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">Featured Scholarships</h2>
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">منح دراسية مميزة</h2> {/* Translated */} 
           <Link href="/scholarships">
             <a className="text-primary hover:text-primary-700 font-medium flex items-center">
-              View all <ArrowRight className="ml-1 h-4 w-4" />
+              عرض الكل <ArrowLeft className="mr-1 h-4 w-4" /> {/* Translated & RTL adjusted */} 
             </a>
           </Link>
         </div>
@@ -93,12 +93,12 @@ const FeaturedScholarships = () => {
                   className="h-48 w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <span className="absolute bottom-3 left-3 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">
-                  Deadline: {scholarship.deadline || 'Ongoing'}
+                <span className="absolute bottom-3 right-3 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white"> {/* Changed left-3 to right-3 */} 
+                  الموعد النهائي: {scholarship.deadline || 'مستمر'} {/* Translated */} 
                 </span>
                 {scholarship.isFullyFunded && (
-                  <span className="absolute right-3 top-3 rounded-full bg-secondary-500 px-3 py-1 text-xs font-semibold text-white">
-                    Full Funding
+                  <span className="absolute left-3 top-3 rounded-full bg-secondary-500 px-3 py-1 text-xs font-semibold text-white"> {/* Changed right-3 to left-3 */} 
+                    تمويل كامل {/* Translated */} 
                   </span>
                 )}
               </div>
@@ -118,11 +118,11 @@ const FeaturedScholarships = () => {
                 </p>
                 <div className="mt-auto flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-700">
-                    <DollarSign className="mr-1 h-4 w-4 inline text-secondary-500" /> {scholarship.amount || 'Varies'}
+                    <DollarSign className="ml-1 h-4 w-4 inline text-secondary-500" /> {scholarship.amount || 'متغير'} {/* Translated & RTL adjusted */} 
                   </span>
                   <Link href={`/scholarships/${scholarship.slug}`}>
                     <a className="flex items-center text-sm font-medium text-primary hover:text-primary-700">
-                      Learn more <ArrowRight className="ml-1 h-4 w-4" />
+                      اعرف المزيد <ArrowLeft className="mr-1 h-4 w-4" /> {/* Translated & RTL adjusted */} 
                     </a>
                   </Link>
                 </div>
@@ -136,3 +136,4 @@ const FeaturedScholarships = () => {
 };
 
 export default FeaturedScholarships;
+

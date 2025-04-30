@@ -35,14 +35,15 @@ const navItems: NavItem[] = [
 ];
 
 interface SidebarProps {
+  isMobile: boolean; // Receive isMobile as a prop
   isMobileOpen: boolean;
   onClose: () => void;
 }
 
-const Sidebar = ({ isMobileOpen, onClose }: SidebarProps) => {
+const Sidebar = ({ isMobile, isMobileOpen, onClose }: SidebarProps) => {
   const [location] = useLocation();
   const { logout } = useAuth();
-  const isMobile = useIsMobile();
+  // const isMobile = useIsMobile(); // Remove local useIsMobile hook
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [prevOpen, setPrevOpen] = useState(false);
 
