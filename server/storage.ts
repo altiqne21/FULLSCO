@@ -395,5 +395,5 @@ export class MemStorage implements IStorage {
 
   // Level methods
   async getLevel(id: number): Promise<Level | undefined> {
-    return this.levels.get(id
+    return this.levels.get(id);
 (Content truncated due to size limit. Use line ranges to read in chunks)
