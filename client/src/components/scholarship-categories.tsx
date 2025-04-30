@@ -10,38 +10,38 @@ import {
 
 const categories = [
   {
-    title: 'By Degree Level',
-    description: 'Undergraduate, Masters, PhD',
+    title: 'حسب المستوى الدراسي',
+    description: 'بكالوريوس، ماجستير، دكتوراه',
     icon: GraduationCap,
     link: '/scholarships?type=degree'
   },
   {
-    title: 'By Destination',
-    description: 'USA, UK, Canada, Australia, Europe',
+    title: 'حسب بلد الدراسة',
+    description: 'أمريكا، بريطانيا، كندا، أستراليا، أوروبا',
     icon: MapPin,
     link: '/scholarships?type=destination'
   },
   {
-    title: 'By Field of Study',
-    description: 'Engineering, Medicine, Business, Arts',
+    title: 'حسب التخصص',
+    description: 'هندسة، طب، أعمال، فنون',
     icon: BookOpen,
     link: '/scholarships?type=field'
   },
   {
-    title: 'By Funding Type',
-    description: 'Full Funding, Partial, Research Grants',
+    title: 'حسب نوع التمويل',
+    description: 'تمويل كامل، جزئي، منح بحثية',
     icon: BarChart,
     link: '/scholarships?type=funding'
   },
   {
-    title: 'By Eligibility',
-    description: 'International Students, Nationality-Specific',
+    title: 'حسب شروط القبول',
+    description: 'طلاب دوليين، جنسيات محددة',
     icon: Users,
     link: '/scholarships?type=eligibility'
   },
   {
-    title: 'Upcoming Deadlines',
-    description: 'Applications closing soon',
+    title: 'المواعيد القادمة',
+    description: 'التقديم سينتهي قريبًا',
     icon: Calendar,
     link: '/scholarships?type=deadline'
   }
@@ -52,14 +52,14 @@ const ScholarshipCategories = () => {
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">Browse Scholarships by Category</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">Find scholarship opportunities that match your academic interests, destination country, or degree level.</p>
+          <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl mb-4">تصفح المنح الدراسية حسب الفئة</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">ابحث عن فرص المنح الدراسية التي تناسب اهتماماتك الأكاديمية، البلد المضيف، أو المستوى الدراسي.</p>
         </div>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {categories.map((category, index) => (
-            <Link key={index} href={category.link}>
-              <a className="group flex items-center p-4 bg-white rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all">
+            <div key={index} className="group cursor-pointer" onClick={() => window.location.href = category.link}>
+              <div className="flex items-center p-4 bg-white rounded-lg border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all">
                 <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary-100 text-primary group-hover:bg-primary group-hover:text-white">
                   <category.icon className="h-5 w-5" />
                 </div>
@@ -68,8 +68,8 @@ const ScholarshipCategories = () => {
                   <p className="text-sm text-gray-600">{category.description}</p>
                 </div>
                 <ArrowRight className="ml-auto text-gray-400 group-hover:text-primary h-4 w-4" />
-              </a>
-            </Link>
+              </div>
+            </div>
           ))}
         </div>
       </div>

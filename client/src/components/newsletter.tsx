@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, Check, AlertCircle } from 'lucide-react';
 
@@ -10,10 +9,23 @@ const Newsletter = () => {
   const [email, setEmail] = useState('');
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [submitted, setSubmitted] = useState(false);
 
   const subscribe = useMutation({
     mutationFn: async (email: string) => {
-      const res = await apiRequest('POST', '/api/subscribers', { email });
+      const res = await fetch('/api/subscribers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'حدث خطأ أثناء الاشتراك');
+      }
+      
       return res.json();
     },
     onSuccess: () => {
@@ -23,10 +35,12 @@ const Newsletter = () => {
         variant: "default",
       });
       setEmail('');
+      setSubmitted(true);
       // تحديث قائمة المشتركين في لوحة الإدارة
       queryClient.invalidateQueries({ queryKey: ['/api/subscribers'] });
     },
     onError: (error: any) => {
+      console.error('Newsletter subscription error:', error);
       toast({
         title: "فشل الاشتراك",
         description: error.message || "ربما تكون مشتركاً بالفعل بهذا البريد الإلكتروني.",
@@ -37,12 +51,20 @@ const Newsletter = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "خطأ في البريد الإلكتروني",
+        description: "يرجى إدخال بريد إلكتروني صحيح.",
+        variant: "destructive",
+      });
+      return;
+    }
+    console.log('Subscribing with email:', email);
     subscribe.mutate(email);
   };
 
   return (
-    <section className="bg-primary py-16 relative overflow-hidden">
+    <section id="newsletter" className="bg-primary py-16 relative overflow-hidden">
       {/* زخارف خلفية */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-white/20"></div>
@@ -60,48 +82,49 @@ const Newsletter = () => {
           </p>
           
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg border border-white/20 max-w-lg mx-auto">
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-              <div className="flex-1 relative">
-                <Input
-                  type="email"
-                  placeholder="أدخل بريدك الإلكتروني"
-                  className="w-full rounded-md border-0 px-4 py-3 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 pr-10"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  dir="ltr"
-                />
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            {submitted ? (
+              <div className="bg-green-100 p-4 rounded-lg text-green-800 text-center">
+                <Check className="h-12 w-12 mx-auto mb-2 text-green-600" />
+                <h3 className="text-lg font-bold mb-2">تم الاشتراك بنجاح!</h3>
+                <p>شكراً لك على الاشتراك في نشرتنا البريدية. سنقوم بإرسال أحدث فرص المنح والمعلومات القيمة إلى بريدك الإلكتروني.</p>
               </div>
-              <Button 
-                type="submit" 
-                variant="accent"
-                className="rounded-md px-6 py-3 font-medium text-white sm:whitespace-nowrap transition-all"
-                disabled={subscribe.isPending}
-              >
-                {subscribe.isPending ? (
-                  <span className="flex items-center">
-                    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full ml-2"></span>
-                    جاري الاشتراك...
-                  </span>
-                ) : (
-                  <span className="flex items-center">
-                    <Check className="ml-2 h-4 w-4" />
-                    اشترك الآن
-                  </span>
-                )}
-              </Button>
-            </form>
-            
-            {/* حالات العرض */}
-            {subscribe.isSuccess && (
-              <div className="mt-4 p-3 bg-green-100 text-green-800 rounded-md flex items-center text-right">
-                <Check className="h-5 w-5 ml-2 text-green-600" />
-                <span>تم الاشتراك بنجاح! تابع بريدك الإلكتروني للحصول على أحدث المنح والفرص.</span>
-              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+                <div className="flex-1 relative">
+                  <Input
+                    type="email"
+                    placeholder="أدخل بريدك الإلكتروني"
+                    className="w-full rounded-md border-0 px-4 py-3 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 pr-10"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    dir="ltr"
+                  />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                </div>
+                <Button 
+                  type="submit" 
+                  variant="accent"
+                  className="rounded-md px-6 py-3 font-medium text-white sm:whitespace-nowrap transition-all"
+                  disabled={subscribe.isPending}
+                >
+                  {subscribe.isPending ? (
+                    <span className="flex items-center">
+                      <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full ml-2"></span>
+                      جاري الاشتراك...
+                    </span>
+                  ) : (
+                    <span className="flex items-center">
+                      <Check className="ml-2 h-4 w-4" />
+                      اشترك الآن
+                    </span>
+                  )}
+                </Button>
+              </form>
             )}
             
-            {subscribe.isError && (
+            {/* حالات الخطأ */}
+            {subscribe.isError && !submitted && (
               <div className="mt-4 p-3 bg-red-100 text-red-800 rounded-md flex items-center text-right">
                 <AlertCircle className="h-5 w-5 ml-2 text-red-600" />
                 <span>حدث خطأ أثناء الاشتراك. قد تكون مشتركاً بالفعل أو يرجى التحقق من صحة البريد الإلكتروني.</span>
